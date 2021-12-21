@@ -59,17 +59,17 @@ resource "google_sql_database" "database" {
   ]
 }
 
-resource "google_sql_user" "user" {
-  for_each = toset(var.db_list)
-  name     = var.db_user
-  instance = each.value
-  password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
+# resource "google_sql_user" "user" {
+#   for_each = toset(var.db_list)
+#   name     = var.db_user
+#   instance = each.value
+#   password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
   
-  depends_on = [
-    google_sql_database.database,
-    data.google_secret_manager_secret_version.db_admin_user_password
-  ]
-}
+#   depends_on = [
+#     google_sql_database.database,
+#     data.google_secret_manager_secret_version.db_admin_user_password
+#   ]
+# }
 
 
 
