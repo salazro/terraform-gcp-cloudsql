@@ -33,7 +33,7 @@ resource "google_sql_database_instance" "cloudsql" {
     # Connections
     ip_configuration {
       ipv4_enabled    = false
-      private_network = "${google_compute_network.vpc_network.self_link}" 
+      private_network = google_compute_network.vpc_network.self_link
     }
 
     # Backups
@@ -77,13 +77,13 @@ resource "google_compute_global_address" "private-ip-peering" {
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 24
-  network       = "${google_compute_network.vpc_network.self_link}" #TODO: this is the network where the gke cluster will be paired
+  network       = google_compute_network.vpc_network.self_link #TODO: this is the network where the gke cluster will be paired
   
   depends_on = [google_compute_network.vpc_network]
 }
 
 resource "google_service_networking_connection" "private-vpc-connection" {
-  network = "${google_compute_network.vpc_network.self_link}" #TODO: this is the network where the gke cluster is deployed
+  network = google_compute_network.vpc_network.self_link #TODO: this is the network where the gke cluster is deployed
   service = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [
     google_compute_global_address.private-ip-peering.name
