@@ -47,7 +47,7 @@ variable "db_user" {
 }
 
 
-variable "network_name" {
+variable "vpc_network" {
   type = string
   description = "vpc network where database will be deployed"
 }
