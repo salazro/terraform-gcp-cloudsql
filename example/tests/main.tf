@@ -12,5 +12,5 @@ module "cloudsql" {
     db_list = var.db_list
     db_instance = var.db_instance
     db_user = var.db_user
-    network = var.network
+    network_name = var.network_name
 }

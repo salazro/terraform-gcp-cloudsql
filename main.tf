@@ -1,3 +1,7 @@
+
+data "google_compute_network" "vpc_network" {
+  name = var.network_name
+}
 resource "random_string" "db_instance_suffix" {
   length  = 4
   special = false
@@ -29,7 +33,7 @@ resource "google_sql_database_instance" "cloudsql" {
     # Connections
     ip_configuration {
       ipv4_enabled        = false
-      private_network     = google_compute_network.custom.id
+      private_network     = data.google_compute_network.vpc_network.id
     }
 
     # Backups
@@ -69,11 +73,11 @@ resource "google_sql_user" "user" {
 #to connect to the Cloud SQL instance
 
 resource "google_compute_global_address" "private-ip-peering" {
-  name          = "${var.network.name}-global_address-vpc-peering"
+  name          = "${var.network_name}-global_address-vpc-peering"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 24
-  network       = var.network.id #TODO: this is the subnet where the gke cluster will be paired
+  network       = data.google_compute_network.vpc_network.id #TODO: this is the subnet where the gke cluster will be paired
 }
 
 resource "google_service_networking_connection" "private-vpc-connection" {
