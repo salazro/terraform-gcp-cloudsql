@@ -77,13 +77,13 @@ resource "google_compute_global_address" "private-ip-peering" {
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 24
-  network       = data.google_compute_network.vpc_network.id #TODO: this is the network where the gke cluster will be paired
+  network       = data.google_compute_network.vpc_network.self_link #TODO: this is the network where the gke cluster will be paired
   
   depends_on = [data.google_compute_network.vpc_network]
 }
 
 resource "google_service_networking_connection" "private-vpc-connection" {
-  network = data.google_compute_network.vpc_network.id #TODO: this is the network where the gke cluster is deployed
+  network = data.google_compute_network.vpc_network.self_link #TODO: this is the network where the gke cluster is deployed
   service = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [
     google_compute_global_address.private-ip-peering.name
