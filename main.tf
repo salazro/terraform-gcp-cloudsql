@@ -70,7 +70,7 @@ resource "google_sql_user" "user" {
 #to connect to the Cloud SQL instance
 
 resource "google_compute_global_address" "private-ip-peering" {
-  name          = "${var.vpc_network}-global_address-vpc-peering"
+  name          = "${var.vpc_network}-global-address-vpc-peering"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 24
