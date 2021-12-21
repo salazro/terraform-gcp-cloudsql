@@ -62,7 +62,7 @@ resource "google_sql_user" "user" {
   for_each = var.db_list
   name     = var.db_user
   instance = each.value
-  password = data.google_secret_manager_secret_version.db_admin_user_password_in_secret_manager.secret_data
+  password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
 }
 
 
