@@ -53,6 +53,10 @@ resource "google_sql_database" "database" {
   for_each = toset(var.db_list)
   name     = each.value
   instance = google_sql_database_instance.cloudsql.name
+  
+  depends_on = [
+    google_sql_database_instance.cloudsql
+  ]
 }
 
 resource "google_sql_user" "user" {
@@ -60,6 +64,11 @@ resource "google_sql_user" "user" {
   name     = var.db_user
   instance = each.value
   password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
+  
+  depends_on = [
+    google_sql_user.user,
+    data.google_secret_manager_secret_version.db_admin_user_password
+  ]
 }
 
 
