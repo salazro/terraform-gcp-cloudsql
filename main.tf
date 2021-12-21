@@ -33,7 +33,7 @@ resource "google_sql_database_instance" "cloudsql" {
     # Connections
     ip_configuration {
       ipv4_enabled    = false
-      private_network = data.google_compute_network.vpc_network.id
+      private_network = google_compute_network.vpc_network.id
     }
 
     # Backups
