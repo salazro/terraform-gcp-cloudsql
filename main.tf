@@ -53,13 +53,13 @@ data "google_secret_manager_secret_version" "db_admin_user_password" {
 }
 
 resource "google_sql_database" "database" {
-  for_each = var.db_list
+  for_each = toset(var.db_list)
   name     = each.value
   instance = google_sql_database_instance.cloudsql.name
 }
 
 resource "google_sql_user" "user" {
-  for_each = var.db_list
+  for_each = toset(var.db_list)
   name     = var.db_user
   instance = each.value
   password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
