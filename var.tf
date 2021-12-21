@@ -1,10 +1,10 @@
 variable "region" {
-  type = string
+  type    = string
   default = "us-central1"
 }
 
 variable "db_location_preference" {
-  type = string
+  type    = string
   default = "us-central1-a"
 }
 
@@ -14,22 +14,22 @@ variable "db_instance" {
 
 
 variable "db_machine_type" {
-  type = string
+  type    = string
   default = "db-n1-standard-2"
 }
 
 variable "db_version" {
-  type = string
+  type    = string
   default = "POSTGRES_12"
 }
 
 variable "db_default_disk_size" {
-  type = string
+  type    = string
   default = "100"
 }
 
 variable "db_availability_type" {
-  type = string
+  type    = string
   default = "REGIONAL"
 }
 
@@ -38,7 +38,7 @@ variable "db_admin_user_password_in_secret_manager" {
 }
 
 variable "db_list" {
-  type = list
+  type        = list
   description = "list of databases that should be create in an instance"
 }
 
@@ -48,6 +48,6 @@ variable "db_user" {
 
 
 variable "vpc_network" {
-  type = string
+  type        = string
   description = "vpc network where database will be deployed"
 }
