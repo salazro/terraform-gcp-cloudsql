@@ -78,6 +78,8 @@ resource "google_compute_global_address" "private-ip-peering" {
   address_type  = "INTERNAL"
   prefix_length = 24
   network       = data.google_compute_network.vpc_network.id #TODO: this is the network where the gke cluster will be paired
+  
+  depends_on = [google_compute_network.vpc_network]
 }
 
 resource "google_service_networking_connection" "private-vpc-connection" {
@@ -86,6 +88,8 @@ resource "google_service_networking_connection" "private-vpc-connection" {
   reserved_peering_ranges = [
     google_compute_global_address.private-ip-peering.name
   ]
+  
+  depends_on = [google_compute_network.vpc_network]
 }
 
 
