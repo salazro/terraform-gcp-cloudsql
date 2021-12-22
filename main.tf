@@ -1,3 +1,7 @@
+provider "google-beta" {
+  region = "us-central1"
+  zone   = "us-central1-a"
+}
 
 resource "random_string" "db_instance_suffix" {
   length  = 4
