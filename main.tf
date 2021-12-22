@@ -8,7 +8,7 @@ resource "random_string" "db_instance_suffix" {
 resource "google_sql_database_instance" "cloudsql" {
 
   # Instance info
-  name             = "${var.db_instance}${random_string.db_instance_suffix.result}"
+  name             = "${var.db_instance}-${random_string.db_instance_suffix.result}"
   region           = var.region
   database_version = var.db_version
 
@@ -39,9 +39,9 @@ resource "google_sql_database_instance" "cloudsql" {
       start_time         = "06:00"
     }
   }
-#   depends_on = [
-#     google_service_networking_connection.private-vpc-connection
-#   ]
+  depends_on = [
+    google_service_networking_connection.private-vpc-connection
+  ]
 }
 
 # data "google_secret_manager_secret_version" "db_admin_user_password" {
@@ -72,25 +72,25 @@ resource "google_sql_database_instance" "cloudsql" {
 
 
 
-# #Private Connection Configuration
-# #We need to configure private services access to allocate an IP address range 
-# #and create a private service connection. This will allow resources in the Web subnet 
-# #to connect to the Cloud SQL instance
+#Private Connection Configuration
+#We need to configure private services access to allocate an IP address range 
+#and create a private service connection. This will allow resources in the Web subnet 
+#to connect to the Cloud SQL instance
 
-# resource "google_compute_global_address" "private-ip-peering" {
-#   name          = "${var.vpc_network}-global-address-vpc-peering"
-#   purpose       = "VPC_PEERING"
-#   address_type  = "INTERNAL"
-#   prefix_length = 24
-#   network       = var.network_id #TODO: this is the network where the gke cluster will be paired
-# }
+resource "google_compute_global_address" "private-ip-peering" {
+  name          = "${var.vpc_network}-global-address-vpc-peering"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 24
+  network       = var.network_id #TODO: this is the network where the gke cluster will be paired
+}
 
-# resource "google_service_networking_connection" "private-vpc-connection" {
-#   network = var.network_id #TODO: this is the network where the gke cluster is deployed
-#   service = "servicenetworking.googleapis.com"
-#   reserved_peering_ranges = [
-#     google_compute_global_address.private-ip-peering.name
-#   ]
-# }
+resource "google_service_networking_connection" "private-vpc-connection" {
+  network = var.network_id #TODO: this is the network where the gke cluster is deployed
+  service = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [
+    google_compute_global_address.private-ip-peering.name
+  ]
+}
 
 
