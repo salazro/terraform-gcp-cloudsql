@@ -46,6 +46,11 @@ variable "db_user" {
   type = string
 }
 
+variable "db_password" {
+  type = string
+}
+
+
 variable "vpc_network" {
   type        = string
   description = "vpc network where database will be deployed"
