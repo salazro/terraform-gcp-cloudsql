@@ -34,7 +34,6 @@ resource "google_sql_database_instance" "cloudsql" {
 
     # Backups
     backup_configuration {
-      binary_log_enabled = true
       enabled            = true
       start_time         = "06:00"
     }
