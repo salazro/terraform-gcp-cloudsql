@@ -1,8 +1,3 @@
-provider "google-beta" {
-  region = "us-central1"
-  zone   = "us-central1-a"
-}
-
 resource "random_string" "db_instance_suffix" {
   length  = 4
   special = false
@@ -44,9 +39,9 @@ resource "google_sql_database_instance" "cloudsql" {
       start_time         = "06:00"
     }
   }
-  depends_on = [
-    google_service_networking_connection.private-vpc-connection
-  ]
+#   depends_on = [
+#     google_service_networking_connection.private-vpc-connection
+#   ]
 }
 
 data "google_secret_manager_secret_version" "db_admin_user_password" {
@@ -63,17 +58,17 @@ resource "google_sql_database" "database" {
   ]
 }
 
-# resource "google_sql_user" "user" {
-#   for_each = toset(var.db_list)
-#   name     = var.db_user
-#   instance = each.value
-#   password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
+resource "google_sql_user" "user" {
+  for_each = toset(var.db_list)
+  name     = var.db_user
+  instance = each.value
+  password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
   
-#   depends_on = [
-#     google_sql_database.database,
-#     data.google_secret_manager_secret_version.db_admin_user_password
-#   ]
-# }
+  depends_on = [
+    google_sql_database.database,
+    data.google_secret_manager_secret_version.db_admin_user_password
+  ]
+}
 
 
 
