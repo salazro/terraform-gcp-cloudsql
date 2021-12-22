@@ -44,53 +44,53 @@ resource "google_sql_database_instance" "cloudsql" {
 #   ]
 }
 
-data "google_secret_manager_secret_version" "db_admin_user_password" {
-  secret = var.db_admin_user_password_in_secret_manager
-}
+# data "google_secret_manager_secret_version" "db_admin_user_password" {
+#   secret = var.db_admin_user_password_in_secret_manager
+# }
 
-resource "google_sql_database" "database" {
-  for_each = toset(var.db_list)
-  name     = each.value
-  instance = google_sql_database_instance.cloudsql.name
+# resource "google_sql_database" "database" {
+#   for_each = toset(var.db_list)
+#   name     = each.value
+#   instance = google_sql_database_instance.cloudsql.name
   
-  depends_on = [
-    google_sql_database_instance.cloudsql
-  ]
-}
+#   depends_on = [
+#     google_sql_database_instance.cloudsql
+#   ]
+# }
 
-resource "google_sql_user" "user" {
-  for_each = toset(var.db_list)
-  name     = var.db_user
-  instance = each.value
-  password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
+# resource "google_sql_user" "user" {
+#   for_each = toset(var.db_list)
+#   name     = var.db_user
+#   instance = each.value
+#   password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
   
-  depends_on = [
-    google_sql_database.database,
-    data.google_secret_manager_secret_version.db_admin_user_password
-  ]
-}
+#   depends_on = [
+#     google_sql_database.database,
+#     data.google_secret_manager_secret_version.db_admin_user_password
+#   ]
+# }
 
 
 
-#Private Connection Configuration
-#We need to configure private services access to allocate an IP address range 
-#and create a private service connection. This will allow resources in the Web subnet 
-#to connect to the Cloud SQL instance
+# #Private Connection Configuration
+# #We need to configure private services access to allocate an IP address range 
+# #and create a private service connection. This will allow resources in the Web subnet 
+# #to connect to the Cloud SQL instance
 
-resource "google_compute_global_address" "private-ip-peering" {
-  name          = "${var.vpc_network}-global-address-vpc-peering"
-  purpose       = "VPC_PEERING"
-  address_type  = "INTERNAL"
-  prefix_length = 24
-  network       = var.network_id #TODO: this is the network where the gke cluster will be paired
-}
+# resource "google_compute_global_address" "private-ip-peering" {
+#   name          = "${var.vpc_network}-global-address-vpc-peering"
+#   purpose       = "VPC_PEERING"
+#   address_type  = "INTERNAL"
+#   prefix_length = 24
+#   network       = var.network_id #TODO: this is the network where the gke cluster will be paired
+# }
 
-resource "google_service_networking_connection" "private-vpc-connection" {
-  network = var.network_id #TODO: this is the network where the gke cluster is deployed
-  service = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = [
-    google_compute_global_address.private-ip-peering.name
-  ]
-}
+# resource "google_service_networking_connection" "private-vpc-connection" {
+#   network = var.network_id #TODO: this is the network where the gke cluster is deployed
+#   service = "servicenetworking.googleapis.com"
+#   reserved_peering_ranges = [
+#     google_compute_global_address.private-ip-peering.name
+#   ]
+# }
 
 
