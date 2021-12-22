@@ -33,10 +33,6 @@ variable "db_availability_type" {
   default = "REGIONAL"
 }
 
-variable "db_admin_user_password_in_secret_manager" {
-  type = string
-}
-
 variable "db_list" {
   type        = list
   description = "list of databases that should be create in an instance"
