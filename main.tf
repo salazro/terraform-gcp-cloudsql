@@ -8,17 +8,17 @@ resource "random_string" "db_instance_suffix" {
 resource "google_sql_database_instance" "cloudsql" {
 
   # Instance info
-  name             = "test" #"${var.db_instance}-${random_string.db_instance_suffix.result}"
+  name             = "${var.db_instance}-${random_string.db_instance_suffix.result}"
   region           = var.region
   database_version = var.db_version
 
   settings {
 
     # Region and zonal availability
-#     availability_type = var.db_availability_type
-#     location_preference {
-#       zone = var.db_location_preference
-#     }
+    availability_type = var.db_availability_type
+    location_preference {
+      zone = var.db_location_preference
+    }
 
     # Machine Type
     tier = var.db_machine_type
@@ -43,31 +43,31 @@ resource "google_sql_database_instance" "cloudsql" {
   ]
 }
 
-# data "google_secret_manager_secret_version" "db_admin_user_password" {
-#   secret = var.db_admin_user_password_in_secret_manager
-# }
+data "google_secret_manager_secret_version" "db_admin_user_password" {
+  secret = var.db_admin_user_password_in_secret_manager
+}
 
-# resource "google_sql_database" "database" {
-#   for_each = toset(var.db_list)
-#   name     = each.value
-#   instance = google_sql_database_instance.cloudsql.name
+resource "google_sql_database" "database" {
+  for_each = toset(var.db_list)
+  name     = each.value
+  instance = google_sql_database_instance.cloudsql.name
   
-#   depends_on = [
-#     google_sql_database_instance.cloudsql
-#   ]
-# }
+  depends_on = [
+    google_sql_database_instance.cloudsql
+  ]
+}
 
-# resource "google_sql_user" "user" {
-#   for_each = toset(var.db_list)
-#   name     = var.db_user
-#   instance = each.value
-#   password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
+resource "google_sql_user" "user" {
+  for_each = toset(var.db_list)
+  name     = var.db_user
+  instance = each.value
+  password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
   
-#   depends_on = [
-#     google_sql_database.database,
-#     data.google_secret_manager_secret_version.db_admin_user_password
-#   ]
-# }
+  depends_on = [
+    google_sql_database.database,
+    data.google_secret_manager_secret_version.db_admin_user_password
+  ]
+}
 
 
 
