@@ -15,10 +15,10 @@ resource "google_sql_database_instance" "cloudsql" {
   settings {
 
     # Region and zonal availability
-    availability_type = var.db_availability_type
-    location_preference {
-      zone = var.db_location_preference
-    }
+#     availability_type = var.db_availability_type
+#     location_preference {
+#       zone = var.db_location_preference
+#     }
 
     # Machine Type
     tier = var.db_machine_type
