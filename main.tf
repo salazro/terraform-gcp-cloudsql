@@ -8,7 +8,7 @@ resource "random_string" "db_instance_suffix" {
 resource "google_sql_database_instance" "cloudsql" {
 
   # Instance info
-  name             = "${var.db_instance}-${random_string.db_instance_suffix.result}"
+  name             = "${var.db_instance}${random_string.db_instance_suffix.result}"
   region           = var.region
   database_version = var.db_version
 
