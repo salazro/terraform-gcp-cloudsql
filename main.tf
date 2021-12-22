@@ -64,7 +64,6 @@ resource "google_sql_user" "user" {
   password = data.google_secret_manager_secret_version.db_admin_user_password.secret_data
   
   depends_on = [
-    google_sql_database.database,
     data.google_secret_manager_secret_version.db_admin_user_password
   ]
 }
