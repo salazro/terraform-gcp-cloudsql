@@ -53,13 +53,13 @@ resource "google_sql_database" "database" {
   ]
 }
 
-resource "google_sql_user" "user" {
-  for_each = toset(var.db_list)
-  name     = var.db_user
-  instance = each.value
-  password = var.db_password
+# resource "google_sql_user" "user" {
+#   for_each = toset(var.db_list)
+#   name     = var.db_user
+#   instance = each.value
+#   password = var.db_password
   
-}
+# }
 
 
 
