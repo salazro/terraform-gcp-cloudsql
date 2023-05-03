@@ -37,6 +37,11 @@ resource "google_sql_database_instance" "cloudsql" {
       enabled            = true
       start_time         = "06:00"
     }
+    
+    database_flags {
+      name  = "max_connections"
+      value = var.max_connections
+    }
   }
   depends_on = [
     google_service_networking_connection.private-vpc-connection
