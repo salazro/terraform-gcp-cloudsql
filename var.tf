@@ -28,6 +28,10 @@ variable "db_default_disk_size" {
   default = "100"
 }
 
+variable "max_connections" {
+  description = "max db connection size"
+}
+
 variable "db_availability_type" {
   type    = string
   default = "REGIONAL"
