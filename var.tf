@@ -30,6 +30,7 @@ variable "db_default_disk_size" {
 
 variable "max_connections" {
   description = "max db connection size"
+  default = "100"
 }
 
 variable "db_availability_type" {
